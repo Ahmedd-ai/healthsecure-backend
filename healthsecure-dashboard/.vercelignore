@@ -1,0 +1,30 @@
+# Backend files - only deploy frontend
+backend/
+*.py
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+env/
+.env
+
+# Test files
+test_*.py
+*.test.js
+*.test.jsx
+
+# Documentation
+*.md
+!README.md
+
+# Editor directories
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database files
+*.db
+*.sqlite
