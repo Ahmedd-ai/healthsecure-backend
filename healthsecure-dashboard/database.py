@@ -5,65 +5,31 @@ import os
 # MONGODB ATLAS CONNECTION (CLOUD)
 # ============================================
 
-# Get MongoDB connection string from environment variable
-# Set this in Render dashboard: Environment Variables
-# Format: mongodb+srv://<username>:<password>@cluster.mongodb.net/<database>?retryWrites=true&w=majority
+# Primary: Get from environment variable (for production/Render)
+# Fallback: Use hardcoded URL (for development/when env not set)
+MONGO_URL = os.getenv("MONGO_URL", "mongodb+srv://ahmed_db:Uloom%40123@cluster0.3i5uuip.mongodb.net/healthcare?retryWrites=true&w=majority")
 
-MONGO_URL = os.getenv("MONGO_URL")
-
-# Initialize client as None initially
-client = None
-db = None
-
-def get_database():
-    """Get the database connection, creating it if necessary."""
-    global client, db
+try:
+    # Configure MongoDB client with timeout settings
+    client = MongoClient(
+        MONGO_URL,
+        serverSelectionTimeoutMS=5000,
+        connectTimeoutMS=5000,
+    )
     
-    if db is not None:
-        return db
+    # Test the connection
+    client.admin.command('ping')
+    print("Successfully connected to MongoDB Atlas!")
     
-    if not MONGO_URL:
-        print("WARNING: MONGO_URL environment variable is not set. Database connection will fail.")
-        # Return a mock db object to allow app to start
-        return None
+    # Get database name from connection string
+    db_name = MONGO_URL.split('/')[-1].split('?')[0] if '/' in MONGO_URL else "healthcare"
+    db = client[db_name]
     
-    try:
-        # Configure MongoDB client with timeout settings
-        client = MongoClient(
-            MONGO_URL,
-            serverSelectionTimeoutMS=5000,
-            connectTimeoutMS=5000,
-        )
-        
-        # Test the connection
-        client.admin.command('ping')
-        print("Successfully connected to MongoDB Atlas!")
-        
-        # Get database name from connection string
-        db_name = MONGO_URL.split('/')[-1].split('?')[0] if '/' in MONGO_URL else "healthcare"
-        db = client[db_name]
-        
-        return db
-    except Exception as e:
-        print(f"Failed to connect to MongoDB Atlas: {e}")
-        # Return None to allow app to start (will fail gracefully when accessing data)
-        return None
-
-# Try to establish connection at import time
-db = get_database()
-
-# If db is None, create placeholder collections to prevent import errors
-if db is None:
-    # Create placeholder for when MONGO_URL is not set (e.g., during build)
-    class PlaceholderCollection:
-        def __getattr__(self, name):
-            return lambda *args, **kwargs: (print(f"WARNING: Database not connected. {name} operation skipped."), None)[1]
-    
-    class PlaceholderDB:
-        def __getitem__(self, name):
-            return PlaceholderCollection()
-    
-    db = PlaceholderDB()
+except Exception as e:
+    print(f"Failed to connect to MongoDB Atlas: {e}")
+    # Fallback to a basic client without connection test
+    client = MongoClient(MONGO_URL, serverSelectionTimeoutMS=5000)
+    db = client["healthcare"]
 
 assets_collection = db["assets"]
 vulnerabilities_collection = db["vulnerabilities"]
@@ -75,7 +41,6 @@ users_collection = db["users"]
 # Export db for use in other modules
 __all__ = [
     "db",
-    "get_database",
     "assets_collection",
     "vulnerabilities_collection",
     "phi_risks_collection",
