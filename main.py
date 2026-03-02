@@ -13,9 +13,16 @@ from routes import auth
 app = FastAPI(title="HealthSecure API")
 
 # CORS (ALLOW YOUR REACT APP)
+origins = [
+    "https://healthsecuredashboard-beta.vercel.app",
+    "https://healthsecuredashboard-gb1wpfl1t-ahmedd-ais-projects.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
