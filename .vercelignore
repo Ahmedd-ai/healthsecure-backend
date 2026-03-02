@@ -1,12 +1,4 @@
-# Backend files - only deploy frontend
-backend/
-*.py
-__pycache__/
-*.pyc
-.pytest_cache/
-venv/
-env/
-.env
+# Vercel ignores
 
 # Test files
 test_*.py
@@ -28,3 +20,10 @@ Thumbs.db
 # Database files
 *.db
 *.sqlite
+
+# Virtual environment
+venv/
+env/
+__pycache__/
+*.pyc
+.pytest_cache/

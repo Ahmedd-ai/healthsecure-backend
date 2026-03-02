@@ -5,5 +5,15 @@
     "env": {
       "CI": "false"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/my-app/build/index.html"
+    }
+  ]
 }
