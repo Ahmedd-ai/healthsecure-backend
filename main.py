@@ -2,14 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
-from routes.dashboard import router as dashboard_router
-from routes.assets import router as assets_router
-from routes.vulnerabilities import router as vulnerabilities_router
-from routes.compliance import router as compliance_router
-from routes.phi_risks import router as phi_risks_router
-from routes.anomalies import router as anomalies_router
-from routes import auth
-
 app = FastAPI(title="HealthSecure API")
 
 # CORS (ALLOW YOUR REACT APP)
@@ -20,6 +12,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Import routes after app is created to avoid circular imports
+from routes.dashboard import router as dashboard_router
+from routes.assets import router as assets_router
+from routes.vulnerabilities import router as vulnerabilities_router
+from routes.compliance import router as compliance_router
+from routes.phi_risks import router as phi_risks_router
+from routes.anomalies import router as anomalies_router
+from routes import auth
 
 # Routers
 app.include_router(assets_router)
@@ -63,3 +64,8 @@ app.openapi = custom_openapi
 @app.get("/")
 def root():
     return {"message": "HealthSecure Backend is running 🚀"}
+
+@app.get("/health")
+def health_check():
+    # Health check endpoint that doesn't require database
+    return {"status": "ok", "message": "Backend is running"}
