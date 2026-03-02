@@ -1,13 +1,7 @@
 from pymongo import MongoClient
 import os
 
-# ============================================
-# MONGODB ATLAS CONNECTION (CLOUD)
-# ============================================
-# MongoDB Atlas connection string
-# Format: mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<database>?retryWrites=true&w=majority
-
-MONGO_URL = "mongodb+srv://ahmed_db:Uloom%40123@cluster0.3i5uuip.mongodb.net/healthsecure?retryWrites=true&w=majority"
+MONGO_URL = os.getenv("MONGO_URL")
 
 client = MongoClient(MONGO_URL)
 db = client["healthsecure"]
