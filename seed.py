@@ -1,17 +1,22 @@
-import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
+import sys
 from pymongo import MongoClient
 from hash_password import get_password_hash
-import os
 
-# Use environment variable or default to local MongoDB
-MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
+# Get MongoDB URL from environment or use default
+MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://ahmed_db:Uloom%40123@cluster0.3i5uuip.mongodb.net/healthcare?retryWrites=true&w=majority")
+
+print(f"Connecting to MongoDB...")
 client = MongoClient(MONGO_URL)
-db = client["healthsecure"]
+
+# Extract database name from connection string
+db_name = "healthcare"  # Use healthcare as per your connection string
+db = client[db_name]
+
+print(f"Using database: {db_name}")
 
 # Clear existing data
+print("Clearing existing data...")
 db.assets.drop()
 db.vulnerabilities.drop()
 db.phi_risks.drop()
@@ -20,8 +25,8 @@ db.anomalies.drop()
 db.users.drop()
 
 # Seed Users with hashed password
-# Default admin credentials: admin / admin123
-# Default user credentials: user / user123
+# Admin: admin / admin123
+# User: user / user123
 users = [
     {
         "username": "admin",
@@ -99,10 +104,17 @@ db.phi_risks.insert_many(phi_risks)
 db.compliance_controls.insert_many(compliance)
 db.anomalies.insert_many(anomalies)
 
+print("\n" + "="*50)
 print("✅ Database seeded successfully!")
-print(f"   - Users: {len(users)} (admin/admin123, user/user123)")
-print(f"   - Assets: {len(assets)}")
-print(f"   - Vulnerabilities: {len(vulnerabilities)}")
-print(f"   - PHI Risks: {len(phi_risks)}")
-print(f"   - Compliance: {len(compliance)}")
-print(f"   - Anomalies: {len(anomalies)}")
+print("="*50)
+print(f"   Database: {db_name}")
+print(f"   \n👤 Users:")
+print(f"      - admin / admin123 (role: admin)")
+print(f"      - user / user123 (role: user)")
+print(f"   \n📊 Data:")
+print(f"      - Assets: {len(assets)}")
+print(f"      - Vulnerabilities: {len(vulnerabilities)}")
+print(f"      - PHI Risks: {len(phi_risks)}")
+print(f"      - Compliance: {len(compliance)}")
+print(f"      - Anomalies: {len(anomalies)}")
+print("="*50)
