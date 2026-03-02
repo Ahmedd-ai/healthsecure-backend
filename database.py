@@ -7,12 +7,17 @@ import os
 # MongoDB Atlas connection string
 # Format: mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<database>?retryWrites=true&w=majority
 
-MONGO_URL = os.getenv("MONGO_URL")
+# Default connection string - will be used if MONGO_URL env var is not set
+DEFAULT_MONGO_URL = "mongodb+srv://ahmed_db:Uloom%40123@cluster0.3i5uuip.mongodb.net/healthsecure?retryWrites=true&w=majority"
 
-# If MONGO_URL is set in environment, use it; otherwise use default
-if not MONGO_URL:
-    # Default connection string - replace with your own if needed
-    MONGO_URL = "mongodb+srv://ahmed_db:Uloom%40123@cluster0.3i5uuip.mongodb.net/healthsecure?retryWrites=true&w=majority"
+# Get MONGO_URL from environment variable
+MONGO_URL = os.environ.get("MONGO_URL", DEFAULT_MONGO_URL)
+
+# Ensure we have a valid URL
+if MONGO_URL is None or MONGO_URL == "":
+    MONGO_URL = DEFAULT_MONGO_URL
+
+print(f"Using MongoDB URL: {MONGO_URL[:30]}...")  # Print first 30 chars for debugging
 
 client = MongoClient(MONGO_URL)
 db = client["healthsecure"]
