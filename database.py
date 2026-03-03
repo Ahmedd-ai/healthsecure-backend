@@ -2,36 +2,33 @@ from pymongo import MongoClient
 import os
 
 # ============================================
-# MONGODB CONNECTION SETUP (Local)
+# MONGODB CONNECTION SETUP
 # ============================================
-# Connect using MongoDB Compass:
-#   mongodb://localhost:27017
-#
-# Make sure MongoDB Server is running locally
+# For local development, use: mongodb://localhost:27017
+# For production (Render), use MongoDB Atlas connection string
+# Set MONGO_URL environment variable on Render
 # ============================================
 
-# Use local MongoDB for MongoDB Compass
-MONGO_URL = "mongodb://localhost:27017"
+# Check for environment variable first (for production), fallback to local
+MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
+
+# If MONGO_URL contains "mongodb+srv", it's an Atlas connection
+# For Atlas, we don't need the port
+if ".net/" in MONGO_URL and "mongodb+srv" in MONGO_URL:
+    # Atlas connection - use direct connect for older pymongo
+    client = MongoClient(MONGO_URL, serverSelectionTimeoutMS=10000)
+else:
+    # Local or other connection
+    client = MongoClient(MONGO_URL, serverSelectionTimeoutMS=5000)
 
 try:
-    # Configure MongoDB client with timeout settings
-    client = MongoClient(
-        MONGO_URL,
-        serverSelectionTimeoutMS=5000,
-        connectTimeoutMS=5000,
-    )
-    
     # Test the connection
     client.admin.command('ping')
     print('Successfully connected to MongoDB!')
-    
-    db = client['healthsecure']
-    
 except Exception as e:
     print(f'Failed to connect to MongoDB: {e}')
-    # Fallback to a basic client without connection test
-    client = MongoClient(MONGO_URL, serverSelectionTimeoutMS=5000)
-    db = client['healthsecure']
+
+db = client['healthsecure']
 
 assets_collection = db['assets']
 vulnerabilities_collection = db['vulnerabilities']
