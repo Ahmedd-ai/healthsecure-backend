@@ -50,3 +50,8 @@ htmlcov/
 # Environment
 .env
 .env.local
+
+# Backend folder (use root level files instead)
+backend/
+healthsecure-dashboard/
+models/
