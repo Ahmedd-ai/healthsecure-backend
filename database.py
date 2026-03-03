@@ -2,12 +2,16 @@ from pymongo import MongoClient
 import os
 
 # ============================================
-# MONGODB ATLAS CONNECTION (CLOUD)
+# MONGODB CONNECTION SETUP (Local)
+# ============================================
+# Connect using MongoDB Compass:
+#   mongodb://localhost:27017
+#
+# Make sure MongoDB Server is running locally
 # ============================================
 
-# Primary: Get from environment variable (for production/Render)
-# Fallback: Use hardcoded URL (for development/when env not set)
-MONGO_URL = os.getenv("MONGO_URL", "mongodb+srv://ahmed_db:Uloom%40123@cluster0.3i5uuip.mongodb.net/healthcare?retryWrites=true&w=majority")
+# Use local MongoDB for MongoDB Compass
+MONGO_URL = "mongodb://localhost:27017"
 
 try:
     # Configure MongoDB client with timeout settings
@@ -19,32 +23,30 @@ try:
     
     # Test the connection
     client.admin.command('ping')
-    print("Successfully connected to MongoDB Atlas!")
+    print('Successfully connected to MongoDB!')
     
-    # Get database name from connection string
-    db_name = MONGO_URL.split('/')[-1].split('?')[0] if '/' in MONGO_URL else "healthcare"
-    db = client[db_name]
+    db = client['healthsecure']
     
 except Exception as e:
-    print(f"Failed to connect to MongoDB Atlas: {e}")
+    print(f'Failed to connect to MongoDB: {e}')
     # Fallback to a basic client without connection test
     client = MongoClient(MONGO_URL, serverSelectionTimeoutMS=5000)
-    db = client["healthcare"]
+    db = client['healthsecure']
 
-assets_collection = db["assets"]
-vulnerabilities_collection = db["vulnerabilities"]
-phi_risks_collection = db["phi_risks"]
-compliance_collection = db["compliance_controls"]
-anomalies_collection = db["anomalies"]
-users_collection = db["users"]
+assets_collection = db['assets']
+vulnerabilities_collection = db['vulnerabilities']
+phi_risks_collection = db['phi_risks']
+compliance_collection = db['compliance_controls']
+anomalies_collection = db['anomalies']
+users_collection = db['users']
 
 # Export db for use in other modules
 __all__ = [
-    "db",
-    "assets_collection",
-    "vulnerabilities_collection",
-    "phi_risks_collection",
-    "compliance_collection",
-    "anomalies_collection",
-    "users_collection",
+    'db',
+    'assets_collection',
+    'vulnerabilities_collection',
+    'phi_risks_collection',
+    'compliance_collection',
+    'anomalies_collection',
+    'users_collection',
 ]
