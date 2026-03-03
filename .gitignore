@@ -28,7 +28,11 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
-# React
+# React - EXCLUDE
+frontend/
+src/
+public/
+healthsecure-dashboard/
 frontend/my-app/build/
 frontend/my-app/.env
 
@@ -51,7 +55,6 @@ htmlcov/
 .env
 .env.local
 
-# Backend folder (use root level files instead)
-backend/
-healthsecure-dashboard/
+# Backend folder - INCLUDE (removed exclusion)
+# backend/  <-- commented out to include
 models/
