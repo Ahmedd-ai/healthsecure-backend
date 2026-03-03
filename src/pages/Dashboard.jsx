@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Dashboard.css";
 import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../config";
 
 function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -27,12 +28,12 @@ function Dashboard() {
         anomRes,
         compRes,
       ] = await Promise.all([
-        fetch("http://localhost:8001/dashboard/stats", { headers }),
-        fetch("http://localhost:8001/assets/", { headers }),
-        fetch("http://localhost:8001/vulnerabilities/", { headers }),
-        fetch("http://localhost:8001/phi-risks/", { headers }),
-        fetch("http://localhost:8001/anomalies/", { headers }),
-        fetch("http://localhost:8001/compliance/", { headers }),
+        fetch(`${API_URL}/dashboard/stats`, { headers }),
+        fetch(`${API_URL}/assets/`, { headers }),
+        fetch(`${API_URL}/vulnerabilities/`, { headers }),
+        fetch(`${API_URL}/phi-risks/`, { headers }),
+        fetch(`${API_URL}/anomalies/`, { headers }),
+        fetch(`${API_URL}/compliance/`, { headers }),
       ]);
 
       const statsData = await statsRes.json();

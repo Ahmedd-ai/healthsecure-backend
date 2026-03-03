@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Vulnerabilities.css";
 import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../config";
 
 function Vulnerabilities() {
   const [vulns, setVulns] = useState([]);
@@ -23,7 +24,7 @@ function Vulnerabilities() {
   });
 
   const fetchVulnerabilities = () => {
-    fetch("http://localhost:8001/vulnerabilities/", {
+    fetch(`${API_URL}/vulnerabilities/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -57,7 +58,7 @@ function Vulnerabilities() {
   const addVulnerability = async (e) => {
     e.preventDefault();
     try {
-      await fetch("http://localhost:8001/vulnerabilities/", {
+      await fetch(`${API_URL}/vulnerabilities/`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -78,7 +79,7 @@ function Vulnerabilities() {
   const markAsFixed = async (id) => {
     try {
       await fetch(
-        `http://localhost:8001/vulnerabilities/${id}?status=Fixed`,
+        `${API_URL}/vulnerabilities/${id}?status=Fixed`,
         { 
           method: "PUT",
           headers: { Authorization: `Bearer ${token}` },
@@ -95,7 +96,7 @@ function Vulnerabilities() {
   const deleteVulnerability = async (id) => {
     if (!window.confirm("Are you sure you want to delete this vulnerability?")) return;
     try {
-      await fetch(`http://localhost:8001/vulnerabilities/${id}`, {
+      await fetch(`${API_URL}/vulnerabilities/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

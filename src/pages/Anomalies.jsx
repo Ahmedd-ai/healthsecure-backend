@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../config";
 
 function Anomalies() {
   const [anomalies, setAnomalies] = useState([]);
@@ -9,7 +10,6 @@ function Anomalies() {
   const [submitting, setSubmitting] = useState(false);
   const { token, isAdmin } = useAuth();
   
-  // Form state
   const [formData, setFormData] = useState({
     user: "",
     ip: "",
@@ -20,7 +20,7 @@ function Anomalies() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:8001/anomalies/", {
+    fetch(`${API_URL}/anomalies/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -65,14 +65,14 @@ function Anomalies() {
   const handleDeleteAnomaly = async (anomalyId) => {
     if (!window.confirm("Are you sure you want to delete this anomaly?")) return;
     try {
-      await fetch(`http://localhost:8001/anomalies/${anomalyId}`, {
+      await fetch(`${API_URL}/anomalies/${anomalyId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
-      fetch("http://localhost:8001/anomalies/", {
+      fetch(`${API_URL}/anomalies/`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -90,7 +90,7 @@ function Anomalies() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await fetch("http://localhost:8001/anomalies/", {
+      await fetch(`${API_URL}/anomalies/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -99,8 +99,7 @@ function Anomalies() {
         body: JSON.stringify(formData),
       });
 
-      // Refresh anomalies list
-      fetch("http://localhost:8001/anomalies/", {
+      fetch(`${API_URL}/anomalies/`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -109,7 +108,6 @@ function Anomalies() {
         .then((res) => res.json())
         .then((data) => setAnomalies(Array.isArray(data) ? data : []));
 
-      // Reset form
       setFormData({
         user: "",
         ip: "",
@@ -129,13 +127,11 @@ function Anomalies() {
 
   return (
     <div style={{ padding: 24 }}>
-      {/* Header */}
       <h1 style={{ marginBottom: 4 }}>AI Anomaly Detection</h1>
       <p style={{ color: "#666", marginBottom: 24 }}>
         Machine learning-powered detection of unusual security patterns and behaviors
       </p>
 
-      {/* Stat Cards */}
       <div
         style={{
           display: "grid",
@@ -167,7 +163,6 @@ function Anomalies() {
         ))}
       </div>
 
-      {/* Search + Filters */}
       <div
         style={{
           background: "#fff",
@@ -220,7 +215,6 @@ function Anomalies() {
         )}
       </div>
 
-      {/* Table */}
       <div
         style={{
           background: "#fff",
@@ -284,7 +278,6 @@ function Anomalies() {
         </table>
       </div>
       
-      {/* Modal Form */}
       {showForm && (
         <AnomalyFormModal 
           formData={formData}
@@ -298,7 +291,6 @@ function Anomalies() {
   );
 }
 
-// Modal Form Component
 function AnomalyFormModal({ formData, handleInputChange, handleSubmit, onClose, submitting }) {
   return (
     <div style={{

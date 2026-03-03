@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../config";
 
 function Assets() {
   const [assets, setAssets] = useState([]);
@@ -19,7 +20,7 @@ function Assets() {
   const { token, isAdmin } = useAuth();
 
   useEffect(() => {
-    fetch("http://localhost:8001/assets/", {
+    fetch(`${API_URL}/assets/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -234,7 +235,7 @@ function Assets() {
 
   const handleAddAsset = async () => {
     try {
-      const response = await fetch("http://localhost:8001/assets/", {
+      const response = await fetch(`${API_URL}/assets/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -254,7 +255,7 @@ function Assets() {
           owner: "",
         });
         // Refresh assets list
-        fetch("http://localhost:8001/assets/", {
+        fetch(`${API_URL}/assets/`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,

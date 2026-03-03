@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../config";
 
 function PHIRisks() {
   const [risks, setRisks] = useState([]);
@@ -17,7 +18,7 @@ function PHIRisks() {
   const { token, isAdmin } = useAuth();
 
   useEffect(() => {
-    fetch("http://localhost:8001/phi-risks/", {
+    fetch(`${API_URL}/phi-risks/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -56,15 +57,14 @@ function PHIRisks() {
   const handleDeleteRisk = async (riskId) => {
     if (!window.confirm("Are you sure you want to delete this PHI risk?")) return;
     try {
-      await fetch(`http://localhost:8001/phi-risks/${riskId}`, {
+      await fetch(`${API_URL}/phi-risks/${riskId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
-      // Refresh risks list
-      fetch("http://localhost:8001/phi-risks/", {
+      fetch(`${API_URL}/phi-risks/`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -80,7 +80,7 @@ function PHIRisks() {
 
   const handleAddRisk = async () => {
     try {
-      const response = await fetch("http://localhost:8001/phi-risks/", {
+      const response = await fetch(`${API_URL}/phi-risks/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -99,8 +99,7 @@ function PHIRisks() {
           description: "",
           records_affected: 0,
         });
-        // Refresh risks list
-        fetch("http://localhost:8001/phi-risks/", {
+        fetch(`${API_URL}/phi-risks/`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -120,13 +119,11 @@ function PHIRisks() {
 
   return (
     <div style={{ padding: "24px" }}>
-      {/* Header */}
       <h1 style={{ fontSize: "28px", marginBottom: "4px" }}>PHI Risk Monitoring</h1>
       <p style={{ color: "#64748b", marginBottom: "24px" }}>
         Monitor and manage Protected Health Information exposure risks
       </p>
 
-      {/* Top Cards */}
       <div
         style={{
           display: "grid",
@@ -141,7 +138,6 @@ function PHIRisks() {
         <StatCard title="Records Affected" value={recordsAffected} color="#2563eb" />
       </div>
 
-      {/* Search + Filters Bar */}
       <div
         style={{
           background: "#fff",
@@ -201,7 +197,6 @@ function PHIRisks() {
         )}
       </div>
 
-      {/* Table */}
       <div
         style={{
           background: "#fff",
@@ -269,7 +264,6 @@ function PHIRisks() {
         </table>
       </div>
 
-      {/* Add PHI Risk Modal */}
       {showModal && (
         <div
           style={{
@@ -421,7 +415,6 @@ function PHIRisks() {
   );
 }
 
-/* Small reusable card */
 function StatCard({ title, value, color }) {
   return (
     <div

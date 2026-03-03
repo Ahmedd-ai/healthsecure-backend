@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../config";
 
 function Compliance() {
   const [items, setItems] = useState([]);
@@ -15,7 +16,7 @@ function Compliance() {
   const { token, isAdmin } = useAuth();
 
   useEffect(() => {
-    fetch("http://localhost:8001/compliance/", {
+    fetch(`${API_URL}/compliance/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -58,14 +59,14 @@ function Compliance() {
   const handleDeleteItem = async (itemId) => {
     if (!window.confirm("Are you sure you want to delete this compliance item?")) return;
     try {
-      await fetch(`http://localhost:8001/compliance/${itemId}`, {
+      await fetch(`${API_URL}/compliance/${itemId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
-      fetch("http://localhost:8001/compliance/", {
+      fetch(`${API_URL}/compliance/`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -81,7 +82,7 @@ function Compliance() {
 
   const handleAddItem = async () => {
     try {
-      const response = await fetch("http://localhost:8001/compliance/", {
+      const response = await fetch(`${API_URL}/compliance/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,7 +99,7 @@ function Compliance() {
           status: "Compliant",
           description: "",
         });
-        fetch("http://localhost:8001/compliance/", {
+        fetch(`${API_URL}/compliance/`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -118,13 +119,11 @@ function Compliance() {
 
   return (
     <div style={{ padding: 24 }}>
-      {/* Header */}
       <h1 style={{ marginBottom: 4 }}>HIPAA Compliance</h1>
       <p style={{ color: "#666", marginBottom: 24 }}>
         Monitor and maintain HIPAA compliance requirements
       </p>
 
-      {/* Stat Cards */}
       <div
         style={{
           display: "grid",
@@ -157,7 +156,6 @@ function Compliance() {
         ))}
       </div>
 
-      {/* Search + Filters */}
       <div
         style={{
           background: "#fff",
@@ -210,7 +208,6 @@ function Compliance() {
         )}
       </div>
 
-      {/* Table */}
       <div
         style={{
           background: "#fff",
@@ -272,7 +269,6 @@ function Compliance() {
         </table>
       </div>
 
-      {/* Add Compliance Modal */}
       {showModal && (
         <div
           style={{
