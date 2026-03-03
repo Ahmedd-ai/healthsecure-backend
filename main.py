@@ -4,10 +4,10 @@ from fastapi.openapi.utils import get_openapi
 
 app = FastAPI(title="HealthSecure API")
 
-# CORS (ALLOW YOUR REACT APP)
+# CORS (ALLOW ALL ORIGINS - FOR TESTING)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://healthsecuredashboard-beta.vercel.app"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
