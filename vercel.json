@@ -1,0 +1,15 @@
+{
+  "build": {
+    "command": "CI=false npm run build",
+    "outputDirectory": "build",
+    "env": {
+      "CI": "false"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/build/index.html"
+    }
+  ]
+}
