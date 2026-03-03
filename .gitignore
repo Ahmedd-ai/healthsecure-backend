@@ -30,7 +30,6 @@ yarn-error.log
 
 # React - EXCLUDE
 frontend/
-healthsecure-dashboard/
 frontend/my-app/build/
 frontend/my-app/.env
 
