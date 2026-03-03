@@ -7,7 +7,7 @@ app = FastAPI(title="HealthSecure API")
 # CORS (ALLOW YOUR REACT APP)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://healthsecuredashboard-beta.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
