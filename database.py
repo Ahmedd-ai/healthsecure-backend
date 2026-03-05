@@ -5,14 +5,31 @@ import os
 # MONGODB ATLAS CONNECTION (CLOUD)
 # ============================================
 
-# MongoDB Atlas connection string
-# Format:
-# mongodb+srv://<username>:<password>@cluster.mongodb.net/<database>?retryWrites=true&w=majority
+# Primary: Get from environment variable (for production/Render)
+# Fallback: Use hardcoded URL (for development/when env not set)
+MONGO_URL = os.getenv("MONGO_URL", "mongodb+srv://ahmed_db:Uloom%40123@cluster0.3i5uuip.mongodb.net/healthcare?retryWrites=true&w=majority")
 
-MONGO_URL = "mongodb+srv://ahmed_db:Uloom%40123@cluster0.3i5uuip.mongodb.net/healthsecure?retryWrites=true&w=majority"
-
-client = MongoClient(MONGO_URL)
-db = client["healthsecure"]
+try:
+    # Configure MongoDB client with timeout settings
+    client = MongoClient(
+        MONGO_URL,
+        serverSelectionTimeoutMS=5000,
+        connectTimeoutMS=5000,
+    )
+    
+    # Test the connection
+    client.admin.command('ping')
+    print("Successfully connected to MongoDB Atlas!")
+    
+    # Get database name from connection string
+    db_name = MONGO_URL.split('/')[-1].split('?')[0] if '/' in MONGO_URL else "healthcare"
+    db = client[db_name]
+    
+except Exception as e:
+    print(f"Failed to connect to MongoDB Atlas: {e}")
+    # Fallback to a basic client without connection test
+    client = MongoClient(MONGO_URL, serverSelectionTimeoutMS=5000)
+    db = client["healthcare"]
 
 assets_collection = db["assets"]
 vulnerabilities_collection = db["vulnerabilities"]

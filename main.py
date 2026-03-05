@@ -1,14 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
+import os
 
-from routes.dashboard import router as dashboard_router
-from routes.assets import router as assets_router
-from routes.vulnerabilities import router as vulnerabilities_router
-from routes.compliance import router as compliance_router
-from routes.phi_risks import router as phi_risks_router
-from routes.anomalies import router as anomalies_router
-from routes import auth
+from .routes.dashboard import router as dashboard_router
+from .routes.assets import router as assets_router
+from .routes.vulnerabilities import router as vulnerabilities_router
+from .routes.compliance import router as compliance_router
+from .routes.phi_risks import router as phi_risks_router
+from .routes.anomalies import router as anomalies_router
+from .routes import auth
 
 app = FastAPI(title="HealthSecure API")
 
@@ -63,3 +64,11 @@ app.openapi = custom_openapi
 @app.get("/")
 def root():
     return {"message": "HealthSecure Backend is running 🚀"}
+
+
+# Run the app (for local development)
+if __name__ == "__main__":
+    import uvicorn
+    # Get port from environment variable (Render) or default to 8001
+    port = int(os.getenv("PORT", "8001"))
+    uvicorn.run(app, host="0.0.0.0", port=port)
