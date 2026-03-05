@@ -5,9 +5,9 @@ import os
 # MONGODB ATLAS CONNECTION (CLOUD)
 # ============================================
 
-# Primary: Get from environment variable (for production/Render)
-# Fallback: Use hardcoded URL (for development/when env not set)
-MONGO_URL = os.getenv("MONGO_URL", "mongodb+srv://ahmed_db:Uloom%40123@cluster0.3i5uuip.mongodb.net/healthcare?retryWrites=true&w=majority")
+# Get from environment variable (required for production/Render)
+# Set MONGO_URL in your environment variables
+MONGO_URL = os.getenv("MONGO_URL")
 
 try:
     # Configure MongoDB client with timeout settings
