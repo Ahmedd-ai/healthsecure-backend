@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import "./Dashboard.css";
 import { useAuth } from "../context/AuthContext";
 import { API_URL } from "../config";
@@ -13,7 +13,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const { token } = useAuth();
 
-  const fetchAll = async () => {
+  const fetchAll = useCallback(async () => {
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -54,22 +54,20 @@ function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    fetchAll();
   }, [token]);
 
+  useEffect(() => {
+    fetchAll();
+  }, [fetchAll]);
+
   // Listen for vulnerability changes to auto-refresh
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const handleVulnChanged = () => {
       fetchAll();
     };
     window.addEventListener("vulnChanged", handleVulnChanged);
     return () => window.removeEventListener("vulnChanged", handleVulnChanged);
-  }, [token]);
+  }, [fetchAll]);
 
   if (loading) return <p style={{ padding: "20px" }}>Loading Dashboard...</p>;
 
