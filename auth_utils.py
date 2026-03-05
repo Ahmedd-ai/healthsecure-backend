@@ -4,8 +4,9 @@ from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from backend.database import users_collection
+import os
 
-SECRET_KEY = "mysecretkey123"
+SECRET_KEY = os.getenv("SECRET_KEY", "mysecretkey123")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
