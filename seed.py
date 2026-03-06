@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from hash_password import get_password_hash
 
 # Get MongoDB URL from environment or use default
-MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://ahmed_db:Uloom%40123@cluster0.3i5uuip.mongodb.net/healthcare?retryWrites=true&w=majority")
+MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://ahmed_db:Ul00m%239XqP%2172%40Db@cluster0.3i5uuip.mongodb.net/healthcare?retryWrites=true&w=majority")
 
 print(f"Connecting to MongoDB...")
 client = MongoClient(MONGO_URL)
