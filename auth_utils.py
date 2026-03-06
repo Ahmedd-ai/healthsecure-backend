@@ -1,3 +1,4 @@
+import os
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
@@ -5,7 +6,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from database import users_collection
 
-SECRET_KEY = "mysecretkey123"
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
