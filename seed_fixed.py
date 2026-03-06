@@ -3,7 +3,7 @@ from passlib.hash import bcrypt
 import os
 
 # Connect to MongoDB
-MONGO_URL = os.getenv("MONGO_URL", "mongodb+srv://ahmed_db:Ul00m%239XqP%2172%40Db@cluster0.3i5uuip.mongodb.net/healthcare?retryWrites=true&w=majority")
+MONGO_URL = os.getenv("MONGO_URL")
 client = MongoClient(MONGO_URL)
 db = client["healthcare"]
 
