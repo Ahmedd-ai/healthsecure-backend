@@ -1,14 +1,9 @@
-# WSGI config for HealthSecure backend on PythonAnywhere
-import sys
+"""
+WSGI entry point for deployment on Render.
+This file is used by Gunicorn to serve the FastAPI application.
+"""
 
-# Add your project directory to the path
-path = '/home/eh722783/healthsecure_backend'
-if path not in sys.path:
-    sys.path.insert(0, path)
+from main import app
 
-# Run the FastAPI application with asgiref
-def application(environ, start_response):
-    from main import app
-    from asgiref.wsgi import AsgiHandler
-    handler = AsgiHandler(app)
-    return handler(environ, start_response)
+# This is required for Gunicorn to find the app
+# The variable must be named 'app' as per Procfile: wsgi:app
